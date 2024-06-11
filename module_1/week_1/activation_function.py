@@ -18,9 +18,6 @@ def activation_func():
     if not is_number(x):
         print("x must be a number")
 
-    if not isinstance(type_of_activation_function, str):
-        print("type_of_activation_function must be a string")
-
     x = float(x)
 
     result = 0
@@ -41,7 +38,6 @@ def activation_func():
             result = x
 
     print(f'{type_of_activation_function}: f({x}) = {result}')
-    return
 
 
 activation_func()
