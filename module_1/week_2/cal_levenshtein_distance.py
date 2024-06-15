@@ -6,25 +6,30 @@ def cal_levenshtein_distance(source, target):
     if n == 0:
         return m
 
-    previous_row = list(range(n + 1))
-    current_row = [0] * (n + 1)
+    rows, cols = len(source) + 1, len(target) + 1
+    matrix = [[i if j == 0 else 0 for j in range(rows)] for i in range(cols)]
 
-    for i in range(1, m + 1):
-        current_row[0] = i
-        for j in range(1, n + 1):
-            if source[i - 1] == target[j - 1]:
-                current_row[j] = previous_row[j - 1]
-            else:
-                current_row[j] = min(previous_row[j] + 1,
-                                     current_row[j - 1] + 1,
-                                     previous_row[j - 1] + 1)
+    for j in range(rows):
+        matrix[0][j] = j
 
-        previous_row, current_row = current_row, previous_row
+    for i in range(1, cols):
+        for j in range(1, rows):
+            sub_cost = 0
+            if source[j-1] != target[i-1]:
+                sub_cost = 1
 
-    return previous_row[n]
+            matrix[i][j] = min(
+                matrix[i-1][j] + 1,
+                matrix[i][j-1] + 1,
+                matrix[i-1][j-1] + sub_cost
+            )
+
+    return matrix[cols-1][rows-1]
 
 
 assert cal_levenshtein_distance("kitten", "sitting") == 3
 assert cal_levenshtein_distance("yu", "you") == 1
+assert cal_levenshtein_distance("yu", "") == 2
+assert cal_levenshtein_distance("", "you") == 3
 
 print(cal_levenshtein_distance("hola", "hello"))
